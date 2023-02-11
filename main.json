@@ -1,0 +1,63 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.14.46.61228",
+      "templateHash": "15333522064563099341"
+    }
+  },
+  "parameters": {
+    "workbookDisplayName": {
+      "type": "string",
+      "defaultValue": "リソースグループ毎の月額料金比較",
+      "metadata": {
+        "description": "ギャラリーまたは保存リストで使用されているブックのフレンドリ名。この名前は、リソース グループ内で一意である必要があります。"
+      }
+    },
+    "workbookType": {
+      "type": "string",
+      "defaultValue": "workbook",
+      "metadata": {
+        "description": "ブックが表示されるギャラリー。サポートされる値には、ブック、tsg などがあります。通常、これは 'ブック' です"
+      }
+    },
+    "workbookSourceId": {
+      "type": "string",
+      "defaultValue": "Azure Monitor",
+      "metadata": {
+        "description": "ブックを関連付けるリソース インスタンスの ID"
+      }
+    },
+    "workbookId": {
+      "type": "string",
+      "defaultValue": "[newGuid()]",
+      "metadata": {
+        "description": "このブック インスタンスの一意の GUID"
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Insights/workbooks",
+      "apiVersion": "2021-03-08",
+      "name": "[parameters('workbookId')]",
+      "location": "[resourceGroup().location]",
+      "kind": "shared",
+      "properties": {
+        "displayName": "[parameters('workbookDisplayName')]",
+        "serializedData": "{\"version\":\"Notebook/1.0\",\"items\":[{\"type\":9,\"content\":{\"version\":\"KqlParameterItem/1.0\",\"parameters\":[{\"id\":\"f89d8093-e099-4620-8771-1111a4450094\",\"version\":\"KqlParameterItem/1.0\",\"name\":\"Subscription\",\"type\":6,\"typeSettings\":{\"additionalResourceOptions\":[\"value::1\"],\"includeAll\":true},\"timeContext\":{\"durationMs\":86400000},\"value\":\"value::1\"}],\"style\":\"pills\",\"queryType\":0,\"resourceType\":\"microsoft.operationalinsights/workspaces\"},\"name\":\"パラメーター - 0\"},{\"type\":3,\"content\":{\"version\":\"KqlItem/1.0\",\"query\":\"{\\\"version\\\":\\\"ARMEndpoint/1.0\\\",\\\"data\\\":\\\"{\\\\r\\\\n    \\\\\\\"type\\\\\\\": \\\\\\\"Usage\\\\\\\",\\\\r\\\\n    \\\\\\\"timeframe\\\\\\\": \\\\\\\"MonthToDate\\\\\\\",\\\\r\\\\n    \\\\\\\"dataset\\\\\\\": {\\\\r\\\\n      \\\\\\\"granularity\\\\\\\": \\\\\\\"None\\\\\\\",\\\\r\\\\n      \\\\\\\"aggregation\\\\\\\": {\\\\r\\\\n       \\\\\\\"totalCost\\\\\\\": {\\\\r\\\\n          \\\\\\\"name\\\\\\\": \\\\\\\"PreTaxCost\\\\\\\",\\\\r\\\\n          \\\\\\\"function\\\\\\\": \\\\\\\"Sum\\\\\\\"\\\\r\\\\n        }\\\\r\\\\n      },\\\\r\\\\n     \\\\\\\"grouping\\\\\\\": [\\\\r\\\\n        {\\\\r\\\\n         \\\\\\\"type\\\\\\\": \\\\\\\"Dimension\\\\\\\",\\\\r\\\\n          \\\\\\\"name\\\\\\\": \\\\\\\"resourceGroup\\\\\\\"\\\\r\\\\n        }\\\\r\\\\n      ]\\\\r\\\\n    }\\\\r\\\\n  }\\\",\\\"headers\\\":[],\\\"method\\\":\\\"POST\\\",\\\"path\\\":\\\"/subscriptions/{Subscription:id}/providers/Microsoft.CostManagement/query\\\",\\\"urlParams\\\":[{\\\"key\\\":\\\"api-version\\\",\\\"value\\\":\\\"2019-11-01\\\"}],\\\"batchDisabled\\\":false,\\\"transformers\\\":[{\\\"type\\\":\\\"jsonpath\\\",\\\"settings\\\":{\\\"tablePath\\\":\\\"$.properties\\\",\\\"columns\\\":[]}}]}\",\"size\":0,\"title\":\"今月分の集計 - 非表示\",\"queryType\":12},\"conditionalVisibility\":{\"parameterName\":\"hide\",\"comparison\":\"isEqualTo\",\"value\":\"false\"},\"name\":\"This Month\"},{\"type\":3,\"content\":{\"version\":\"KqlItem/1.0\",\"query\":\"{\\\"version\\\":\\\"ARMEndpoint/1.0\\\",\\\"data\\\":\\\"{\\\\r\\\\n    \\\\\\\"type\\\\\\\": \\\\\\\"Usage\\\\\\\",\\\\r\\\\n    \\\\\\\"timeframe\\\\\\\": \\\\\\\"TheLastMonth\\\\\\\",\\\\r\\\\n    \\\\\\\"dataset\\\\\\\": {\\\\r\\\\n      \\\\\\\"granularity\\\\\\\": \\\\\\\"None\\\\\\\",\\\\r\\\\n      \\\\\\\"aggregation\\\\\\\": {\\\\r\\\\n       \\\\\\\"totalCost\\\\\\\": {\\\\r\\\\n          \\\\\\\"name\\\\\\\": \\\\\\\"PreTaxCost\\\\\\\",\\\\r\\\\n          \\\\\\\"function\\\\\\\": \\\\\\\"Sum\\\\\\\"\\\\r\\\\n        }\\\\r\\\\n      },\\\\r\\\\n     \\\\\\\"grouping\\\\\\\": [\\\\r\\\\n        {\\\\r\\\\n         \\\\\\\"type\\\\\\\": \\\\\\\"Dimension\\\\\\\",\\\\r\\\\n          \\\\\\\"name\\\\\\\": \\\\\\\"resourceGroup\\\\\\\"\\\\r\\\\n        }\\\\r\\\\n      ]\\\\r\\\\n    }\\\\r\\\\n  }\\\",\\\"headers\\\":[],\\\"method\\\":\\\"POST\\\",\\\"path\\\":\\\"/subscriptions/{Subscription:id}/providers/Microsoft.CostManagement/query\\\",\\\"urlParams\\\":[{\\\"key\\\":\\\"api-version\\\",\\\"value\\\":\\\"2019-11-01\\\"}],\\\"batchDisabled\\\":false,\\\"transformers\\\":[{\\\"type\\\":\\\"jsonpath\\\",\\\"settings\\\":{\\\"tablePath\\\":\\\"$.properties\\\",\\\"columns\\\":[]}}]}\",\"size\":0,\"title\":\"先月分の集計 - 非表示\",\"queryType\":12},\"conditionalVisibility\":{\"parameterName\":\"hide\",\"comparison\":\"isEqualTo\",\"value\":\"false\"},\"name\":\"Last Month\"},{\"type\":3,\"content\":{\"version\":\"KqlItem/1.0\",\"query\":\"{\\\"version\\\":\\\"Merge/1.0\\\",\\\"merges\\\":[{\\\"id\\\":\\\"b4c22b4a-cebf-4681-a62e-d58ad6af303c\\\",\\\"mergeType\\\":\\\"leftouter\\\",\\\"leftTable\\\":\\\"This Month\\\",\\\"rightTable\\\":\\\"Last Month\\\",\\\"leftColumn\\\":\\\"resourceGroup\\\",\\\"rightColumn\\\":\\\"resourceGroup\\\"}],\\\"projectRename\\\":[{\\\"originalName\\\":\\\"[This Month].resourceGroup\\\",\\\"mergedName\\\":\\\"resourceGroup\\\",\\\"fromId\\\":\\\"b4c22b4a-cebf-4681-a62e-d58ad6af303c\\\"},{\\\"originalName\\\":\\\"[This Month].PreTaxCost\\\"},{\\\"originalName\\\":\\\"[This Month].Currency\\\"},{\\\"originalName\\\":\\\"[Last Month].PreTaxCost\\\"},{\\\"originalName\\\":\\\"[Last Month].resourceGroup\\\"},{\\\"originalName\\\":\\\"[Last Month].Currency\\\"}]}\",\"size\":4,\"title\":\"rg_LeftOuter\",\"queryType\":7},\"customWidth\":\"0\",\"name\":\"rg_LeftOuter\",\"styleSettings\":{\"margin\":\"0\",\"padding\":\"0\",\"maxWidth\":\"0\"}},{\"type\":3,\"content\":{\"version\":\"KqlItem/1.0\",\"query\":\"{\\\"version\\\":\\\"Merge/1.0\\\",\\\"merges\\\":[{\\\"id\\\":\\\"b4c22b4a-cebf-4681-a62e-d58ad6af304b\\\",\\\"mergeType\\\":\\\"rightanti\\\",\\\"leftTable\\\":\\\"This Month\\\",\\\"rightTable\\\":\\\"Last Month\\\",\\\"leftColumn\\\":\\\"resourceGroup\\\",\\\"rightColumn\\\":\\\"resourceGroup\\\"}],\\\"projectRename\\\":[{\\\"originalName\\\":\\\"[Last Month].resourceGroup\\\",\\\"mergedName\\\":\\\"resourceGroup\\\",\\\"fromId\\\":\\\"b4c22b4a-cebf-4681-a62e-d58ad6af304b\\\"},{\\\"originalName\\\":\\\"[Last Month].PreTaxCost\\\"},{\\\"originalName\\\":\\\"[Last Month].Currency\\\"}]}\",\"size\":4,\"title\":\"rg_RightAnti\",\"queryType\":7},\"customWidth\":\"0\",\"name\":\"rg_RightAnti\",\"styleSettings\":{\"margin\":\"0\",\"padding\":\"0\",\"maxWidth\":\"0\"}},{\"type\":3,\"content\":{\"version\":\"KqlItem/1.0\",\"query\":\"{\\\"version\\\":\\\"Merge/1.0\\\",\\\"merges\\\":[{\\\"id\\\":\\\"b4c22b4a-cebf-4681-a62e-d58ad6af305e\\\",\\\"mergeType\\\":\\\"union\\\",\\\"leftTable\\\":\\\"rg_LeftOuter\\\",\\\"rightTable\\\":\\\"rg_RightAnti\\\"}],\\\"projectRename\\\":[{\\\"originalName\\\":\\\"resourceGroup\\\",\\\"mergedName\\\":\\\"resourceGroup\\\",\\\"fromId\\\":\\\"unknown\\\"},{\\\"originalName\\\":\\\"[rg_LeftOuter].resourceGroup\\\"}]}\",\"size\":4,\"title\":\"rg_list\",\"queryType\":7},\"customWidth\":\"0\",\"name\":\"rg_list\",\"styleSettings\":{\"margin\":\"0\",\"padding\":\"0\",\"maxWidth\":\"0\"}},{\"type\":3,\"content\":{\"version\":\"KqlItem/1.0\",\"query\":\"resourcecontainers\\r\\n| where type =~ \\\"Microsoft.resources/subscriptions/resourcegroups\\\"\\r\\n| project id, name\",\"size\":0,\"title\":\"rg_link\",\"queryType\":1,\"resourceType\":\"microsoft.resourcegraph/resources\",\"crossComponentResources\":[\"{Subscription}\"]},\"conditionalVisibility\":{\"parameterName\":\"hide\",\"comparison\":\"isEqualTo\",\"value\":\"false\"},\"name\":\"rg_link\"},{\"type\":3,\"content\":{\"version\":\"KqlItem/1.0\",\"query\":\"{\\\"version\\\":\\\"Merge/1.0\\\",\\\"merges\\\":[{\\\"id\\\":\\\"b4c22b4a-cebf-4681-a62e-d58ad6af3069\\\",\\\"mergeType\\\":\\\"leftouter\\\",\\\"leftTable\\\":\\\"rg_list\\\",\\\"rightTable\\\":\\\"This Month\\\",\\\"leftColumn\\\":\\\"resourceGroup\\\",\\\"rightColumn\\\":\\\"resourceGroup\\\"},{\\\"id\\\":\\\"b4c22b4a-cebf-4681-a62e-d58ad6af306a\\\",\\\"mergeType\\\":\\\"leftouter\\\",\\\"leftTable\\\":\\\"rg_list\\\",\\\"rightTable\\\":\\\"Last Month\\\",\\\"leftColumn\\\":\\\"resourceGroup\\\",\\\"rightColumn\\\":\\\"resourceGroup\\\"},{\\\"id\\\":\\\"b4c22b4a-cebf-4681-a62e-d58ad6af306b\\\",\\\"mergeType\\\":\\\"outer\\\",\\\"leftTable\\\":\\\"rg_list\\\",\\\"rightTable\\\":\\\"rg_link\\\",\\\"leftColumn\\\":\\\"resourceGroup\\\",\\\"rightColumn\\\":\\\"name\\\"}],\\\"projectRename\\\":[{\\\"originalName\\\":\\\"[rg_list].resourceGroup\\\",\\\"mergedName\\\":\\\"リソース グループ名\\\",\\\"fromId\\\":\\\"b4c22b4a-cebf-4681-a62e-d58ad6af3069\\\"},{\\\"originalName\\\":\\\"[rg_link].id\\\",\\\"mergedName\\\":\\\"リソース グループへのリンク\\\",\\\"fromId\\\":\\\"b4c22b4a-cebf-4681-a62e-d58ad6af306b\\\"},{\\\"originalName\\\":\\\"[Last Month].PreTaxCost\\\",\\\"mergedName\\\":\\\"先月の利用料金\\\",\\\"fromId\\\":\\\"b4c22b4a-cebf-4681-a62e-d58ad6af306a\\\"},{\\\"originalName\\\":\\\"[This Month].PreTaxCost\\\",\\\"mergedName\\\":\\\"今月の利用料金\\\",\\\"fromId\\\":\\\"b4c22b4a-cebf-4681-a62e-d58ad6af3069\\\"},{\\\"originalName\\\":\\\"[追加された列]\\\",\\\"mergedName\\\":\\\"差額 (今月 - 先月)\\\",\\\"fromId\\\":null,\\\"isNewItem\\\":true,\\\"newItemData\\\":[{\\\"criteriaContext\\\":{\\\"operator\\\":\\\"Default\\\",\\\"rightValType\\\":\\\"column\\\",\\\"resultValType\\\":\\\"expression\\\",\\\"resultVal\\\":\\\"[\\\\\\\"今月の利用料金\\\\\\\"] - [\\\\\\\"先月の利用料金\\\\\\\"]\\\"}}]},{\\\"originalName\\\":\\\"[This Month].resourceGroup\\\"},{\\\"originalName\\\":\\\"[This Month].Currency\\\"},{\\\"originalName\\\":\\\"[Last Month].resourceGroup\\\"},{\\\"originalName\\\":\\\"[Last Month].Currency\\\"},{\\\"originalName\\\":\\\"[rg_link].name\\\"}]}\",\"size\":0,\"queryType\":7,\"gridSettings\":{\"formatters\":[{\"columnMatch\":\"先月の利用料金\",\"formatter\":0,\"numberFormat\":{\"unit\":0,\"options\":{\"currency\":\"USD\",\"style\":\"currency\",\"maximumFractionDigits\":3}}},{\"columnMatch\":\"今月の利用料金\",\"formatter\":0,\"numberFormat\":{\"unit\":0,\"options\":{\"currency\":\"USD\",\"style\":\"currency\",\"maximumFractionDigits\":3}}},{\"columnMatch\":\"差額 (今月 - 先月)\",\"formatter\":8,\"formatOptions\":{\"min\":0,\"max\":100,\"palette\":\"redBright\"},\"numberFormat\":{\"unit\":0,\"options\":{\"currency\":\"USD\",\"style\":\"currency\",\"maximumFractionDigits\":3}}}],\"sortBy\":[{\"itemKey\":\"$gen_heatmap_差額 (今月 - 先月)_4\",\"sortOrder\":1}]},\"sortBy\":[{\"itemKey\":\"$gen_heatmap_差額 (今月 - 先月)_4\",\"sortOrder\":1}]},\"name\":\"クエリ - 7\"}],\"isLocked\":false,\"fallbackResourceIds\":[\"Azure Monitor\"]}",
+        "version": "1.0",
+        "sourceId": "[parameters('workbookSourceId')]",
+        "category": "[parameters('workbookType')]"
+      }
+    }
+  ],
+  "outputs": {
+    "workbookId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Insights/workbooks', parameters('workbookId'))]"
+    }
+  }
+}
